@@ -1,0 +1,14 @@
+:root {
+    --bg-color: #444;
+    --text-color: #ffffff;
+    --link-color: red;
+    --link-color-visited: #d00;
+}
+
+a {
+    color: var(--link-color);
+}
+
+a:visited {
+    color: var(--link-color-visited);
+}

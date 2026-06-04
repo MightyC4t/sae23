@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8" />
+	<title>Accueil SAE23</title>
+	<link rel="shortcut icon" href="favicon.png" type="image/png">
+
+	<link rel="stylesheet" href="styles/style.css">
+	
+	<script>
+        const savedTheme = localStorage.getItem('theme-preference');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+
+        // Storing appropriate state for later use
+        window.__themeInitialState = shouldBeDark;
+
+        if (shouldBeDark) {
+            const link = document.createElement('link');
+            link.id = 'dark-theme-style';
+            link.rel = 'stylesheet';
+            link.href = 'styles/dark-mode.css';
+            document.head.appendChild(link);
+        }
+    </script>
+
+</head>
+<body>
+	<header>
+		<div>
+			<label for="theme">Mode sombre</label>
+			<input type="checkbox" name="theme" id="theme">
+
+			<script>
+				const themeCheckbox = document.getElementById('theme');
+				
+				themeCheckbox.checked = window.__themeInitialState;
+
+				themeCheckbox.addEventListener('change', () => {
+					let darkLink = document.getElementById('dark-theme-style');
+
+					if (themeCheckbox.checked) {
+						localStorage.setItem('theme-preference', 'dark');
+						
+						if (!darkLink) {
+							darkLink = document.createElement('link');
+							darkLink.id = 'dark-theme-style';
+							darkLink.rel = 'stylesheet';
+							darkLink.href = 'styles/dark-mode.css';
+							document.head.appendChild(darkLink);
+						}
+					} else {
+						localStorage.setItem('theme-preference', 'light');
+						if (darkLink) {
+							darkLink.remove();
+						}
+					}
+				});
+			</script>
+		</div>
+		<nav>
+			<ul>
+				<li><a href="#">Accueil</a></li>
+				<li><a href="mesures.php">Mesures</a></li>
+				<li>Mentions légales</li>
+			</ul>
+		</nav>
+	</header>
+
+	<br><br><br><br><br>
+
+	<p>Site développé pour la SAE23 !</p>
+</body>
+</html>

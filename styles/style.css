@@ -1,0 +1,44 @@
+:root {
+	--bg-color: #ffffff;
+	--text-color: #1a1a1a;
+}
+
+body {
+	margin: 20px;
+	
+	font-family: Verdana, sans-serif;
+
+	background-color: var(--bg-color);
+	color: var(--text-color);
+
+	transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+
+@media screen and (min-width: 600px) {
+	header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		padding: 10px 20px;
+		/* border: red solid 2px; */
+
+		border-radius: 40px;
+		box-shadow: black 0px 0px 20px;
+	}
+
+	nav {
+		float: right
+	}
+
+	nav > ul {
+		display: flex;
+		justify-content: space-between;
+		list-style-type: none;
+	}
+
+	nav > ul > li {
+		margin: 0px 20px;
+	}
+}
