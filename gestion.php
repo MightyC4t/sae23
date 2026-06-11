@@ -2,8 +2,9 @@
 <html lang="fr">
 <head>
 	<meta charset="UTF-8" />
-	<title>Mesures bâtiments</title>
+	<title>Accueil SAE23</title>
 	<link rel="shortcut icon" href="favicon.png" type="image/png">
+
 	<link rel="stylesheet" href="styles/style.css">
 	
 	<script>
@@ -61,10 +62,10 @@
 		<nav>
 			<ul>
 				<li><a href="index.php">Accueil</a></li>
-				<li><a href="?room=E105">E105</a></li>
-				<li>E208</li>
-				<li>B112</li>
-				<li>B113</li>
+				<li><a href="administration.php">Administration</a></li>
+				<li><a href="#">Gestion</a></li>
+				<li><a href="mesures.php">Consultation</a></li>
+				<li><a href="gestion_de_projet.php">Gestion de projet</a></li>
 				<li><a href="mentions_legales.html">Mentions légales</a></li>
 			</ul>
 		</nav>
@@ -72,14 +73,6 @@
 
 	<br><br><br><br><br>
 
-	<p>Pour les mesures c'est par ici ==></p>
-
-	<?php		
-		require "./scripts/login.php";
-
-		foreach ($_GET as $x => $y) {
-			echo "$x: $y <br>";
-		}
-	?>
+	<p>Site développé pour la SAE23 !</p>
 </body>
 </html>
