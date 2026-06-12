@@ -64,7 +64,7 @@
 				<li><a href="#">Accueil</a></li>
 				<li><a href="administration.php">Administration</a></li>
 				<li><a href="gestion.php">Gestion</a></li>
-				<li><a href="mesures.php">Consultation</a></li>
+				<li><a href="consultation.php">Consultation</a></li>
 				<li><a href="gestion_de_projet.php">Gestion de projet</a></li>
 				<li><a href="mentions_legales.html">Mentions légales</a></li>
 			</ul>

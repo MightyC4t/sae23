@@ -6,7 +6,7 @@
 
     mysqli_query($id_bd,"SET NAMES 'utf8'");
 
-    // $resultat = mysqli_query($id_bd,"SELECT * from Batiment")
+    // $resultat = mysqli_query($id_bd,"SELECT * from Mesure")
     //     or die("Exécution de la requête impossible");
 
     // mysqli_close($id_bd);

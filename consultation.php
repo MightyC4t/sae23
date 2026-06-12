@@ -62,9 +62,9 @@
 			<ul>
 				<li><a href="index.php">Accueil</a></li>
 				<li><a href="?room=E105">E105</a></li>
-				<li>E208</li>
-				<li>B112</li>
-				<li>B113</li>
+				<li><a href="?room=E208">E208</a></li>
+				<li><a href="?room=B112">B112</a></li>
+				<li><a href="?room=B113">B113</a></li>
 				<li><a href="mentions_legales.html">Mentions légales</a></li>
 			</ul>
 		</nav>
@@ -75,7 +75,7 @@
 	<p>Pour les mesures c'est par ici ==></p>
 
 	<?php		
-		require "./scripts/login.php";
+		// require "./scripts/login.php";
 
 		foreach ($_GET as $x => $y) {
 			echo "$x: $y <br>";

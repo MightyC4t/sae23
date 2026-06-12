@@ -36,16 +36,15 @@ while read -r ligne_du_message; do
     tvoc=$(echo $valeur | jq ".tvoc")
     pression=$(echo $valeur | jq ".pressure")
 
-    # Saving data
+    # Saving data 
 
     echo "$temperature $humidite $co2 $tvoc $pression"
 
-    # As said in the README.md we are saving the room, sensor, value, date and hour
-    # data_a_sauver="$salle;$capteur;$valeurFinale;$(date +"%D");$(date +"%T")"
 
-    mysql -u mmoutonnet -p'dbpassword' sae23 -e "
-    INSERT INTO Mesure (id_mes, date, horaire, valeur, capteur_nom) VALUES 
-    (NULL, CURDATE(), CURTIME(), $temperature, 'Capteur_Temp_E105'),
-    (NULL, CURDATE(), CURTIME(), $humidite, 'Capteur_Hum_E105');
+    # Supprimer ce commentaire à posteriori
+    # Créer une boucle qui itère parmis les données (la variable $data)
+    /opt/lampp/bin/mysql -u mmoutonnet -p'dbpassword' sae23 -e "
+                                INSERT INTO Mesure (id_mes, date, horaire, valeur, nom_capteur) VALUES 
+                                (NULL, CURDATE(), CURTIME(), $data, 'Capteur_temp_$salle');"
 
 done <<< $message
