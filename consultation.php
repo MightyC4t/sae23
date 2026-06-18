@@ -1,5 +1,5 @@
 <?php
-$page_title = "Gestion"; 
+$page_title = "Consultation"; 
 require "includes/header.php"; 
 ?>
 
