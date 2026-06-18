@@ -1,1 +1,8 @@
 - [x] Rendre la page `consultation.php` dynamique de sorte que les (futurs) liens du `<nav>` soient des valeurs de clés à demande à la base de données
+- [ ] Réaliser les pages :
+    - [ ] Accueil
+    - [ ] Administration
+    - [ ] Gestion
+    - [X] Consultation
+    - [ ] Gestion de projet
+    - [ ] Mentions légales

@@ -1,78 +1,22 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-	<meta charset="UTF-8" />
-	<title>Accueil SAE23</title>
-	<link rel="shortcut icon" href="favicon.png" type="image/png">
+<?php
+$page_title = "Accueil SAE23"; 
+require "includes/header.php"; 
+?>
 
-	<link rel="stylesheet" href="styles/style.css">
+<main class="home-container">
+	<h1>Bienvenue sur le portail de suivi de la SAE 23</h1>
+	<p>Ce site permet de superviser l'état des capteurs environnementaux au sein des différents bâtiments de l'IUT.</p>
 	
-	<script>
-        const savedTheme = localStorage.getItem('theme-preference');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        
-        const shouldBeDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+	<section class="quick-links">
+		<h2>Raccourcis de navigation</h2>
+		<p>Utilisez le menu ci-dessus ou cliquez sur l'un des accès directs pour démarrer :</p>
+		<ul>
+			<li>Consulter les dernières mesures en temps réel : <a href="consultation.php">Accéder aux mesures</a></li>
+			<li>Gérer le parc de capteurs et les salles : <a href="gestion.php">Espace Gestion</a></li>
+		</ul>
+	</section>
+</main>
 
-        // Storing appropriate state for later use
-        window.__themeInitialState = shouldBeDark;
-
-        if (shouldBeDark) {
-            const link = document.createElement('link');
-            link.id = 'dark-theme-style';
-            link.rel = 'stylesheet';
-            link.href = 'styles/dark-mode.css';
-            document.head.appendChild(link);
-        }
-    </script>
-
-</head>
-<body>
-	<header>
-		<div>
-			<label for="theme">Mode sombre</label>
-			<input type="checkbox" name="theme" id="theme">
-
-			<script>
-				const themeCheckbox = document.getElementById('theme');
-				
-				themeCheckbox.checked = window.__themeInitialState;
-
-				themeCheckbox.addEventListener('change', () => {
-					let darkLink = document.getElementById('dark-theme-style');
-
-					if (themeCheckbox.checked) {
-						localStorage.setItem('theme-preference', 'dark');
-						
-						if (!darkLink) {
-							darkLink = document.createElement('link');
-							darkLink.id = 'dark-theme-style';
-							darkLink.rel = 'stylesheet';
-							darkLink.href = 'styles/dark-mode.css';
-							document.head.appendChild(darkLink);
-						}
-					} else {
-						localStorage.setItem('theme-preference', 'light');
-						if (darkLink) {
-							darkLink.remove();
-						}
-					}
-				});
-			</script>
-		</div>
-		<nav>
-			<ul>
-				<li><a href="#">Accueil</a></li>
-				<li><a href="administration.php">Administration</a></li>
-				<li><a href="gestion.php">Gestion</a></li>
-				<li><a href="consultation.php">Consultation</a></li>
-				<li><a href="gestion_de_projet.php">Gestion de projet</a></li>
-				<li><a href="mentions_legales.html">Mentions légales</a></li>
-			</ul>
-		</nav>
-	</header>
-
-	<br><br><br><br><br>
-
-	<p>Site développé pour la SAE23 !</p>
-</body>
-</html>
+<?php 
+require "includes/footer.php"; 
+?>

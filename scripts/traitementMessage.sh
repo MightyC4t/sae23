@@ -26,8 +26,6 @@ message="$(mosquitto_sub -h mqtt.iut-blagnac.fr -u student -P student -p 8883 -t
 while read -r ligne_du_message; do
     valeur=$(echo $ligne_du_message | cut -d " " -f 2- | jq ".[0]")
 
-    # echo "On a reçu ==> $capteur $valeur"
-
     # Extracting data
 
     temperature=$(echo $valeur | jq ".temperature")
@@ -41,10 +39,14 @@ while read -r ligne_du_message; do
     echo "$temperature $humidite $co2 $tvoc $pression"
 
 
-    # Supprimer ce commentaire à posteriori
-    # Créer une boucle qui itère parmis les données (la variable $data)
-    /opt/lampp/bin/mysql -u mmoutonnet -p'dbpassword' sae23 -e "
-                                INSERT INTO Mesure (id_mes, date, horaire, valeur, nom_capteur) VALUES 
-                                (NULL, CURDATE(), CURTIME(), $data, 'Capteur_temp_$salle');"
-
+        
+    /opt/lampp/bin/mysql -u "mmoutonnet" -p"dbpassword" "sae23" -e "
+    INSERT INTO Mesure (id_mes, date, horaire, valeur, nom_capteur) VALUES  
+    (NULL, CURDATE(), CURTIME(), $temperature, 'Temp_${salle}'),
+    (NULL, CURDATE(), CURTIME(), $humidite, 'Hum_${salle}'),
+    (NULL, CURDATE(), CURTIME(), $co2, 'CO2_${salle}'),
+    (NULL, CURDATE(), CURTIME(), $tvoc, 'TVOC_${salle}'),
+    (NULL, CURDATE(), CURTIME(), $pression, 'Press_${salle}');
+    " 
+    
 done <<< $message

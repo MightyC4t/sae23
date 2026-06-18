@@ -1,14 +1,23 @@
-:root {
-    --bg-color: #444;
-    --text-color: #ffffff;
-    --link-color: red;
-    --link-color-visited: #d00;
+html.dark {
+	--bg-color: #444444;
+	--text-color: #ffffff;
+	--border-color: #ffffff;
+	--ctrl-bg: #555555;
+	--th-bg: #333333;
+	--link-color: #ff4d4d;
+	--link-color-visited: #ff9999;
 }
 
-a {
-    color: var(--link-color);
+html.dark a {
+	color: var(--link-color);
 }
 
-a:visited {
-    color: var(--link-color-visited);
+html.dark a:visited {
+	color: var(--link-color-visited);
+}
+
+@media screen and (min-width: 600px) {
+	html.dark header {
+		box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 20px;
+	}
 }

@@ -1,5 +1,5 @@
 <?php
-$page_title = "Gestion de projet"; 
+$page_title = "Mentions légales"; 
 require "includes/header.php"; 
 ?>
 <?php 
