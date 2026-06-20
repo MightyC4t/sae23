@@ -19,6 +19,13 @@
 
 	<link rel="stylesheet" href="styles/style.css">
 	<link rel="stylesheet" href="styles/dark-mode.css">
+	<?php
+	if (isset($styles)) {
+		foreach ($styles as $style) {
+			echo '<link rel="stylesheet" href="'. $style .'">';
+		}
+	}
+	?>
 </head>
 
 <body>
@@ -42,7 +49,7 @@
 				});
 			</script>
 		</div>
-		<nav>
+		<nav>	
 			<?php
 			if (isset($page_title) && $page_title != 'Consultation') {
 				echo "
@@ -58,7 +65,7 @@
 			} else {
 				echo "<ul>
 						<li><a href=\"index.php\">Accueil</a></li>";
-				foreach (["E105", "E208", "B111", "B113"] as $roomOption) {
+				foreach (["E106", "E208", "B103", "B113"] as $roomOption) {
 					echo "<li><a href=\"?room=$roomOption\">$roomOption</a></li>";
 				}
 				echo "<li><a href=\"mentions_legales.php\">Mentions légales</a></li>

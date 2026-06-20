@@ -18,6 +18,6 @@ html.dark a:visited {
 
 @media screen and (min-width: 600px) {
 	html.dark header {
-		box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 20px;
+		box-shadow: rgba(255, 255, 255, 0.5) 0px 0px 20px 5px;
 	}
 }

@@ -12,6 +12,8 @@ body {
 	background-color: var(--bg-color);
 	color: var(--text-color);
 	transition: background-color 0.3s ease, color 0.3s ease;
+
+	font-size: large;
 }
 
 header {
@@ -30,25 +32,22 @@ header {
 	margin-right: 15px;
 }
 
-#tab_mess {
+#tab_mess, #tab_stats {
 	table-layout: fixed;
 	width: 100%;
 	border-collapse: collapse;
 	text-align: center;
 }
 
-#tab_mess caption {
-	font-weight: bold;
-	margin-bottom: 10px;
-}
-
-#tab_mess thead th {
+#tab_mess thead th, #tab_stats thead th {
 	background-color: var(--th-bg);
 	width: 25%;
 }
 
 #tab_mess thead > tr > th,
-#tab_mess tbody > tr > td {
+#tab_mess tbody > tr > td,
+#tab_stats thead > tr > th,
+#tab_stats tbody > tr > td  {
 	border: 1px var(--border-color) solid;
 	padding: 8px;
 }
