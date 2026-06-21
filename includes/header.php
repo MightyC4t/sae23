@@ -50,28 +50,13 @@
 			</script>
 		</div>
 		<nav>	
-			<?php
-			if (isset($page_title) && $page_title != 'Consultation') {
-				echo "
-				<ul>
-					<li><a href=\"index.php\">Accueil</a></li>
-					<li><a href=\"administration.php\">Administration</a></li>
-					<li><a href=\"gestion.php\">Gestion</a></li>
-					<li><a href=\"consultation.php\">Consultation</a></li>
-					<li><a href=\"gestion_de_projet.php\">Gestion de projet</a></li>
-					<li><a href=\"mentions_legales.php\">Mentions légales</a></li>
-				</ul>
-				";
-			} else {
-				echo "<ul>
-						<li><a href=\"index.php\">Accueil</a></li>";
-				foreach (["E106", "E208", "B103", "B113"] as $roomOption) {
-					echo "<li><a href=\"?room=$roomOption\">$roomOption</a></li>";
-				}
-				echo "<li><a href=\"mentions_legales.php\">Mentions légales</a></li>
-					</ul>";
-
-			}
-			?>
+			<ul>
+				<li><a href="index.php">Accueil</a></li>
+				<li><a href="administration.php">Administration</a></li>
+				<li><a href="gestion.php">Gestion</a></li>
+				<li><a href="consultation.php">Consultation</a></li>
+				<li><a href="gestion_de_projet.php">Gestion de projet</a></li>
+				<li><a href="mentions_legales.php">Mentions légales</a></li>
+			</ul>
 		</nav>
 	</header>

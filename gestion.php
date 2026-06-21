@@ -11,11 +11,11 @@ $page_title = "Gestion";
 $styles = ["styles/administration.css"];
 
 require "includes/header.php";
-require "./scripts/bd_query.php";
+require "./scripts/db_query.php";
 ?>
 
 <main id="admin-dashboard">
-    <h1>Tableau de bord de supervision du bâtiment</h1>
+    <h1>Tableau de bord de supervision du bâtiment <?php echo $_SESSION['bat']; ?></h1>
     <a href="logout.php">Se déconnecter</a>
 
     <p>Bienvenue, <strong><?php echo $_SESSION['username']; ?></strong></p>
@@ -24,12 +24,13 @@ require "./scripts/bd_query.php";
 $login_gestionnaire = $_SESSION['username'];
 
 // Fetch all rooms assigned to the connected building manager
-$salles_result = query_from_bd("
+$salles_result = query_from_db("
 	SELECT Salle.nom_salle 
 	FROM Salle 
 	JOIN Batiment ON Salle.id_batiment = Batiment.id_bat
 	WHERE Batiment.login = '$login_gestionnaire';
 ");
+
 $salles_rows = $salles_result->fetch_all(MYSQLI_ASSOC);
 
 // We are keeping the rooms possessed by the manager
@@ -52,10 +53,10 @@ if (empty($liste_salles)) {
 $salles_in_clause = '"' . implode('","', $liste_salles) . '"';
 
 // Retrieve and sanitize GET filters and sorting inputs
-$room = isset($_GET['room']) ? $_GET['room'] : 'all';
-$filter_type = isset($_GET['filter_type']) ? $_GET['filter_type'] : 'all';
-$sort_by     = isset($_GET['sort_by'])     ? $_GET['sort_by']     : 'date';
-$order       = isset($_GET['order'])        ? $_GET['order']        : 'DESC';
+$room 		 = isset($_GET['room']) 		? $_GET['room'] 		: 'all';
+$filter_type = isset($_GET['filter_type']) 	? $_GET['filter_type'] 	: 'all';
+$sort_by     = isset($_GET['sort_by'])     	? $_GET['sort_by']     	: 'date';
+$order       = isset($_GET['order'])        ? $_GET['order']		: 'DESC';
 
 if ($order !== 'ASC' && $order !== 'DESC') {
 	$order = 'DESC';
@@ -82,29 +83,31 @@ if ($sort_by === 'valeur') {
 $order_clause .= ", Mesure.id_mes ASC";
 
 // Full query request
-$result = query_from_bd("
+$result = query_from_db("
 	SELECT Capteur.nom_salle AS Salle, Capteur.type, Mesure.date, Mesure.horaire, Mesure.valeur, Capteur.unite
 	FROM Mesure 
-	JOIN Capteur ON Mesure.nom_capteur = Capteur.nom 
+	JOIN Capteur ON Mesure.nom_capteur = Capteur.nom_capteur 
 	$where_clause
 	$order_clause
 	LIMIT 10;
 ");
+
 $rows = $result->fetch_all(MYSQLI_ASSOC);
 
 // Query statistics grouped by room and type for the assigned building
-$stats_result = query_from_bd("
+$stats_result = query_from_db("
 	SELECT Capteur.nom_salle AS Salle, Capteur.type, ROUND(AVG(Mesure.valeur), 1) AS Moyenne, MIN(Mesure.valeur) AS Min, MAX(Mesure.valeur) AS Max, Capteur.unite
 	FROM Mesure
-	JOIN Capteur ON Mesure.nom_capteur = Capteur.nom
+	JOIN Capteur ON Mesure.nom_capteur = Capteur.nom_capteur
 	WHERE Capteur.nom_salle IN ($salles_in_clause)
 	GROUP BY Capteur.nom_salle, Capteur.type
 	ORDER BY Capteur.nom_salle ASC, Capteur.type ASC;
 ");
+
 $stats_rows = $stats_result->fetch_all(MYSQLI_ASSOC);
 
 // Dictionaries for system-to-human translation
-$traductionTypes = ['tvoc' => 'Taux de COV', 'pressure' => 'Pression', 'co2' => 'CO2', 'temperature' => 'Température', 'humidite' => 'Humidité'];
+$traductionTypes = ['tvoc' => 'Taux de COV', 'pressure' => 'Pression', 'co2' => 'CO2', 'temperature' => 'Température', 'humidity' => 'Humidité'];
 $traductionUnites = ['pourcentage' => '%', 'celcius' => '°C', 'ppm' => 'ppm', 'ppb' => 'ppb', 'hPa' => 'hPa'];
 ?>
 
@@ -123,8 +126,8 @@ $traductionUnites = ['pourcentage' => '%', 'celcius' => '°C', 'ppm' => 'ppm', '
 				</thead>
 				<tbody>
 					<?php foreach ($stats_rows as $st_row): 
-						$typeAffichage = isset($traductionTypes[$st_row['type']]) ? $traductionTypes[$st_row['type']] : $st_row['type'];
-						$uniteAffichage = isset($traductionUnites[$st_row['unite']]) ? $traductionUnites[$st_row['unite']] : $st_row['unite'];
+						$typeAffichage = $traductionTypes[$st_row['type']];
+						$uniteAffichage = $traductionUnites[$st_row['unite']];
 					?>
 						<tr>
 							<td><?php echo $st_row['Salle']; ?></td>

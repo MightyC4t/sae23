@@ -1,12 +1,12 @@
 <?php
-$page_title = "Consultation Globale"; 
+$page_title = "Consultation"; 
 require "includes/header.php"; 
-require "./scripts/bd_query.php";
+require "./scripts/db_query.php";
 
-$result = query_from_bd("
-	SELECT Capteur.nom_salle AS Salle, Capteur.type, Mesure.date, Mesure.horaire, Mesure.valeur, Capteur.unite
+$result = query_from_db("
+	SELECT Capteur.nom_salle AS salle, Capteur.type, Mesure.date, Mesure.horaire, Mesure.valeur, Capteur.unite
 	FROM Mesure 
-	JOIN Capteur ON Mesure.nom_capteur = Capteur.nom 
+	JOIN Capteur ON Mesure.nom_capteur = Capteur.nom_capteur 
 	JOIN (
 	-- 
 		SELECT nom_capteur, MAX(CONCAT(Mesure.date, ' ', Mesure.horaire)) AS max_moment
@@ -33,20 +33,22 @@ if (!empty($rows)) {
 			</tr>
 		</thead>
 		<tbody>';
-	$traductionTypes = ['tvoc' => 'Taux de COV', 'pressure' => 'Pression', 'co2' => 'CO2', 'temperature' => 'Température', 'humidite' => 'Humidité'];
+	$traductionTypes = ['tvoc' => 'Taux de COV', 'pressure' => 'Pression', 'co2' => 'CO2', 'temperature' => 'Température', 'humidity' => 'Humidité'];
 	$traductionUnites = ['pourcentage' => '%', 'celcius' => '°C', 'ppm' => 'ppm', 'ppb' => 'ppb', 'hPa' => 'hPa'];
 	
+	# $row is an assossiative array
 	foreach ($rows as $row) {
-		$typeAffichage = isset($traductionTypes[$row['type']]) ? $traductionTypes[$row['type']] : $row['type'];
-		$uniteAffichage = isset($traductionUnites[$row['unite']]) ? $traductionUnites[$row['unite']] : $row['unite'];
+		$typeAffichage = $traductionTypes[$row['type']];
+		$uniteAffichage = $traductionUnites[$row['unite']];
 
 		echo '<tr>';
-		echo '<td>' . $row['Salle'] . '</td>';
+		echo '<td>' . $row['salle'] . '</td>';
 		echo '<td>' . $typeAffichage . '</td>';
 		echo '<td>' . $row['date'] . '</td>';
 		echo '<td>' . $row['horaire'] . '</td>';
 		echo '<td>' . $row['valeur'] . ' ' . $uniteAffichage . '</td>';
-		echo '</tr>';
+		echo '</tr>
+		';
 	}
 	echo '</tbody>';
 	echo '</table>';
