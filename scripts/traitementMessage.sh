@@ -4,7 +4,7 @@ SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
 cd "$SCRIPT_DIR" || exit 1
 
-# If we pass nothing or "help" then print correct usage
+# Check arguments and display usage if needed
 if [ -z "$1" ] ||  [ $1 == "help" ]; then
 echo "usage: $0 [help] | <salle> [publish]"
     echo "Exemples :"
@@ -26,38 +26,50 @@ if [ ! -z "$2" ]; then
     fi
 fi
 
-# Subscription part
+# Load database credentials
+source ./config.sh
+export MYSQL_PWD="$MYSQL_PASSWORD"
 
-# We collect the data from the 2nd floor
 topic="sensors/AM107/by-room/$salle/data"
 
 echo -e "\033[3mEn attente de la réception d'un message...\033[0m"
 
-# 3 rooms per floor
+# Fetch 1 MQTT message
 message="$(mosquitto_sub -h mqtt.iut-blagnac.fr -u student -P student -p 8883 -t $topic -W 3 -C 1 -v)"
 
+echo "Message reçu !"
+
+# Parse JSON payload
 valeur=$(echo $message | cut -d " " -f 2- | jq ".[0]")
 
-# Extracting data
+# Get room sensors from DB
+requete_capteurs=$(/opt/lampp/bin/mysql -u "$MYSQL_USER" "$MYSQL_DB" -e "
+    SELECT nom_capteur, Capteur.type
+    FROM Capteur 
+    JOIN Salle ON Capteur.nom_salle = Salle.nom_salle 
+    WHERE Salle.nom_salle = '$salle'" --batch)
 
-temperature=$(echo $valeur | jq ".temperature")
-humidite=$(echo $valeur | jq ".humidity")
-co2=$(echo $valeur | jq ".co2")
-tvoc=$(echo $valeur | jq ".tvoc")
-pression=$(echo $valeur | jq ".pressure")
+while IFS= read -r ligne; do
+    capteurs+=("$ligne")
+done < <(echo "$requete_capteurs" | tail -n +2)
 
-# Saving data 
-
-
+# Save to DB or print values
 if [ "$mode_publish" = true ]; then
-    /opt/lampp/bin/mysql -u "mmoutonnet" -p"dbpassword" "sae23" -e "
-    INSERT INTO Mesure (id_mes, date, horaire, valeur, nom_capteur) VALUES  
-    (NULL, CURDATE(), CURTIME(), $temperature, 'Temp_${salle}'),
-    (NULL, CURDATE(), CURTIME(), $humidite, 'Hum_${salle}'),
-    (NULL, CURDATE(), CURTIME(), $co2, 'CO2_${salle}'),
-    (NULL, CURDATE(), CURTIME(), $tvoc, 'TVOC_${salle}'),
-    (NULL, CURDATE(), CURTIME(), $pression, 'Press_${salle}');
-    " 
+    for capteur in "${capteurs[@]}"; do
+        id=$(echo "$capteur" | cut -f 1)
+        type=$(echo "$capteur" | cut -f 2)
+
+        donnee=$(echo $valeur | jq ".$type")
+
+        # Insert measurement into DB
+        /opt/lampp/bin/mysql -u "$MYSQL_USER" "$MYSQL_DB" -e "
+        INSERT INTO Mesure (id_mes, date, horaire, valeur, nom_capteur) VALUES 
+        (NULL, CURDATE(), CURTIME(), $donnee, \"$id\")" 2>>error.log
+
+        if [ $? -ne 0 ]; then
+            echo "MySQL error occurred at $(date)" >> error.log
+        fi
+    done
 else
     echo "$salle : $temperature $humidite $co2 $tvoc $pression"
 fi
